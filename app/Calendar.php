@@ -4,6 +4,7 @@ namespace App;
 
 use Ramsey\Uuid\Uuid;
 use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\Reader;
 
 class Calendar
 {
@@ -35,5 +36,22 @@ class Calendar
         }
 
         return $vcalendar->serialize();
+    }
+
+    public static function fromICalendar(string $ical): self
+    {
+        $events = [];
+        $vcalendar = Reader::read($ical);
+
+        foreach($vcalendar->VEVENT as $event) {
+            array_push($events, new Event([
+                'title' => (string) $event->SUMMARY,
+                'description' => (string) $event->DESCRIPTION,
+                'start_at' => (string) $event->DTSTART,
+                'end_at' => (string) $event->DTEND,
+            ]));
+        }
+
+        return new self($events);
     }
 }
