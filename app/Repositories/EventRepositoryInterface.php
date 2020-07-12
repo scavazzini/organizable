@@ -9,4 +9,5 @@ interface EventRepositoryInterface
 {
     public function createEvent(Event $event, User $user): void;
     public function createEvents(array $events, User $user): void;
+    public function getEventsInRange(\DateTime $from, \DateTime $to, User $user): array;
 }

@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Event;
 use App\Repositories\EventRepositoryInterface;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class EloquentEventRepository implements EventRepositoryInterface
@@ -30,5 +31,18 @@ class EloquentEventRepository implements EventRepositoryInterface
             DB::rollback();
             throw new \Exception('Failed to persist events.');
         }
+    }
+
+    public function getEventsInRange(\DateTime $from, \DateTime $to, User $user): array
+    {
+        return Event::query()
+            ->whereHas('participants', function(Builder $query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->where('start_at', '<=', $to)
+            ->where('end_at', '>=', $from)
+            ->orderBy('start_at')
+            ->get()
+            ->all();
     }
 }
