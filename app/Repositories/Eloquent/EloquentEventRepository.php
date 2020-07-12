@@ -45,4 +45,15 @@ class EloquentEventRepository implements EventRepositoryInterface
             ->get()
             ->all();
     }
+
+    public function getAllEvents(User $user): array
+    {
+        return Event::query()
+            ->whereHas('participants', function(Builder $query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->orderBy('start_at')
+            ->get()
+            ->all();
+    }
 }
