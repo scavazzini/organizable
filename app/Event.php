@@ -10,6 +10,16 @@ class Event extends Model
 
     protected $dates = ['start_at', 'end_at'];
 
+    public function isOwnedBy(User $user): bool
+    {
+        $participant = $this->participants()->find($user->id);
+
+        if (!is_a($participant, User::class)) {
+            return false;
+        }
+        return $participant->pivot->owner;
+    }
+
     public function participants()
     {
         return $this->belongsToMany(User::class)
