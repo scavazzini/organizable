@@ -12,4 +12,5 @@ interface EventRepositoryInterface
     public function getEventByUuid(string $uuid): ?Event;
     public function getAllEvents(User $user): array;
     public function getEventsInRange(\DateTime $from, \DateTime $to, User $user): array;
+    public function updateEvent(Event $event, array $data): void;
 }

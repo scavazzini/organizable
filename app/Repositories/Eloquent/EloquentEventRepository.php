@@ -6,7 +6,9 @@ use App\Event;
 use App\Repositories\EventRepositoryInterface;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class EloquentEventRepository implements EventRepositoryInterface
 {
@@ -60,5 +62,21 @@ class EloquentEventRepository implements EventRepositoryInterface
     public function getEventByUuid(string $uuid): ?Event
     {
         return Event::find($uuid);
+    }
+
+    public function updateEvent(Event $event, array $data): void
+    {
+        $data = Arr::only($data, ['title', 'description', 'start_at', 'end_at']);
+
+        $validator = Validator::make($data, [
+            'title' => 'required',
+            'start_at' => 'required|date',
+            'end_at' => 'required|date|after_or_equal:start'
+        ]);
+        if ($validator->fails()) {
+            throw new \Exception('Event does not satisfy the requirements.');
+        }
+
+        $event->update($data);
     }
 }
