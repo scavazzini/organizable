@@ -27,7 +27,7 @@ class Calendar
 
         foreach ($this->events as $event) {
             $vcalendar->add('VEVENT', [
-                'UID' => Uuid::uuid4(),
+                'UID' => $event->id,
                 'SUMMARY' => $event->title,
                 'DESCRIPTION' => $event->description,
                 'DTSTART' => $event->start_at,
