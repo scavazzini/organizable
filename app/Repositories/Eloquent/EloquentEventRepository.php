@@ -56,4 +56,9 @@ class EloquentEventRepository implements EventRepositoryInterface
             ->get()
             ->all();
     }
+
+    public function getEventByUuid(string $uuid): ?Event
+    {
+        return Event::find($uuid);
+    }
 }
