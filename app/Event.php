@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Http\Traits\UUID;
+use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
