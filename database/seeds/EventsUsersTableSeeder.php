@@ -19,7 +19,7 @@ class EventsUsersTableSeeder extends Seeder
         ]);
         $user->save();
 
-        $eventRepository->createEvent(new Event([
+        $eventRepository->create(new Event([
             'title' => $faker->sentence,
             'description' => $faker->text,
             'start_at' => Carbon::today(),
