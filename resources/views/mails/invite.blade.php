@@ -6,7 +6,7 @@
 @component('mail::panel')
     {{ $event->description }}
 
-    {{ $event->start_at->format('j F, Y h:i') }} - {{ $event->end_at->format('j F, Y h:i') }}
+    {{ $event->start_at->format('j F, Y H:i') }} - {{ $event->end_at->format('j F, Y H:i') }}
 @endcomponent
 
 You may create an account if you do not already have one.
