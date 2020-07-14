@@ -47,8 +47,8 @@ class Calendar
             array_push($events, new Event([
                 'title' => (string) $event->SUMMARY,
                 'description' => (string) $event->DESCRIPTION,
-                'start_at' => (string) $event->DTSTART,
-                'end_at' => (string) $event->DTEND,
+                'start_at' => $event->DTSTART,
+                'end_at' => $event->DTEND,
             ]));
         }
 
