@@ -13,13 +13,22 @@ use Illuminate\Support\Facades\Validator;
 class EloquentEventRepository implements EventRepositoryInterface
 {
 
-    public function createEvent(Event $event, User $user): void
+    public function create($events, User $user): void
     {
-        $this->createEvents([$event], $user);
-    }
+        if (is_a($events, Event::class)) {
+            $events = array($events);
+        }
 
-    public function createEvents(array $events, User $user): void
-    {
+        if (!is_array($events)) {
+            throw new \InvalidArgumentException('First argument must be an Event or an array of Events');
+        }
+
+        foreach ($events as $event) {
+            if (!is_a($event, Event::class)) {
+                throw new \InvalidArgumentException('First argument must be an Event or an array of Events');
+            }
+        }
+
         DB::beginTransaction();
         try {
 
