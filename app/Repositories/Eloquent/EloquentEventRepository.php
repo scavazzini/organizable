@@ -88,4 +88,24 @@ class EloquentEventRepository implements EventRepositoryInterface
 
         $event->update($data);
     }
+
+    public function delete(Event $event): void
+    {
+        DB::beginTransaction();
+        try {
+
+            $event->participants()->detach();
+            $event->delete();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw new \Exception('Failed to delete event.');
+        }
+    }
+
+    public function unlinkUser(Event $event, User $user): void
+    {
+        $event->participants()->detach($user);
+    }
 }

@@ -12,4 +12,6 @@ interface EventRepositoryInterface
     public function getAllEvents(User $user): array;
     public function getEventsInRange(\DateTime $from, \DateTime $to, User $user): array;
     public function updateEvent(Event $event, array $data): void;
+    public function delete(Event $event): void;
+    public function unlinkUser(Event $event, User $user): void;
 }
