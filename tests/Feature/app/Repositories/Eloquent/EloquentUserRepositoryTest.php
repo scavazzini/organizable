@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\app\Repositories\Eloquent;
 
+use App\Event;
 use App\Repositories\Eloquent\EloquentUserRepository;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -18,6 +20,29 @@ class EloquentUserRepositoryTest extends TestCase
     {
         parent::setUp();
         $this->userRepository = new EloquentUserRepository();
+    }
+
+    public function testShouldGetUsersWithUpcomingEvents()
+    {
+        $userWithUpcomingEvent = factory(User::class)->create()
+            ->each(function ($user) {
+                $user->events()->save(factory(Event::class)->make([
+                    'start_at' => Carbon::now(),
+                    'end_at' => Carbon::now()->addWeek(),
+                ]));
+            });
+
+        $userWithoutUpcomingEvent = factory(User::class)->create()
+            ->each(function ($user) {
+                $user->events()->save(factory(Event::class)->make([
+                    'start_at' => Carbon::now()->addYear(),
+                    'end_at' => Carbon::now()->addYear()->addWeek(),
+                ]));
+            });
+
+        $users = $this->userRepository->getUsersWithUpcomingEvents(5);
+
+        $this->assertCount(1, $users);
     }
 
     public function testShouldUpdateUser()
