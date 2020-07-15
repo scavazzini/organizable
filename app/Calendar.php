@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Ramsey\Uuid\Uuid;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Reader;
 
@@ -10,7 +9,7 @@ class Calendar
 {
     private $events;
 
-    public function __construct($events)
+    public function __construct(array $events)
     {
         $this->events = $events;
     }
