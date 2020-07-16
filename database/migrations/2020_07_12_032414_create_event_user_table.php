@@ -19,6 +19,9 @@ class CreateEventUserTable extends Migration
             $table->uuid('user_id');
             $table->boolean('owner')->default(false);
             $table->timestamps();
+
+            $table->foreign('event_id')->references('id')->on('events');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
