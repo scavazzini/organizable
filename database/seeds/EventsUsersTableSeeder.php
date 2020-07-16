@@ -9,10 +9,8 @@ class EventsUsersTableSeeder extends Seeder
 {
     public function run(EventRepositoryInterface $eventRepository)
     {
-        $user = factory(User::class)->make();
+        $user = factory(User::class)->create();
         $event = factory(Event::class)->make();
-
-        $user->save();
         $eventRepository->create($event, $user);
     }
 }
