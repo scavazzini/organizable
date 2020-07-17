@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Reader;
 
@@ -23,6 +24,7 @@ class Calendar
     {
         $vcalendar = new VCalendar();
         $vcalendar->PRODID = env('APP_NAME');
+        $iCalendarGeneratedAt = Carbon::now();
 
         foreach ($this->events as $event) {
             $vcalendar->add('VEVENT', [
@@ -31,6 +33,9 @@ class Calendar
                 'DESCRIPTION' => $event->description,
                 'DTSTART' => $event->start_at,
                 'DTEND' => $event->end_at,
+                'CREATED' => $event->created_at,
+                'LAST-MODIFIED' => $event->updated_at,
+                'DTSTAMP' => $iCalendarGeneratedAt,
             ]);
         }
 
