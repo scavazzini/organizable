@@ -44,7 +44,7 @@ class EloquentEventRepository implements EventRepositoryInterface
         }
     }
 
-    public function getEventsInRange(\DateTime $from, \DateTime $to, User $user): array
+    public function getInRange(\DateTime $from, \DateTime $to, User $user): array
     {
         return Event::query()
             ->whereHas('participants', function(Builder $query) use ($user) {
@@ -57,7 +57,7 @@ class EloquentEventRepository implements EventRepositoryInterface
             ->all();
     }
 
-    public function getAllEvents(User $user): array
+    public function getAll(User $user): array
     {
         return Event::query()
             ->whereHas('participants', function(Builder $query) use ($user) {
@@ -68,12 +68,12 @@ class EloquentEventRepository implements EventRepositoryInterface
             ->all();
     }
 
-    public function getEventByUuid(string $uuid): ?Event
+    public function getByUuid(string $uuid): ?Event
     {
         return Event::find($uuid);
     }
 
-    public function updateEvent(Event $event, array $data): void
+    public function update(Event $event, array $data): void
     {
         $data = Arr::only($data, ['title', 'description', 'start_at', 'end_at']);
 

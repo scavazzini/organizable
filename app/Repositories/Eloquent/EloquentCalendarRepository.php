@@ -22,7 +22,7 @@ class EloquentCalendarRepository implements CalendarRepositoryInterface
     {
         $from = Carbon::createFromDate($year, $month)->startOfMonth();
         $to = Carbon::createFromDate($year, $month)->endOfMonth();
-        $events = $this->eventRepository->getEventsInRange($from, $to, $user);
+        $events = $this->eventRepository->getInRange($from, $to, $user);
 
         return new Calendar($events);
     }
