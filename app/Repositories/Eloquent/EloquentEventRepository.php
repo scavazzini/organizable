@@ -93,8 +93,6 @@ class EloquentEventRepository implements EventRepositoryInterface
     {
         DB::beginTransaction();
         try {
-
-            $event->participants()->detach();
             $event->delete();
             DB::commit();
 
