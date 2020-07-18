@@ -35,7 +35,7 @@ class EventInvitationMailTest extends TestCase
 
         // Perform invite with mocked Mail facade
         Mail::fake();
-        Mail::to($recipient)->queue(new EventInvitationMail($event, $sender, $token));
+        Mail::to($recipient)->queue(new EventInvitationMail($token));
 
         // Assert mailable was queued
         Mail::assertQueued(function (EventInvitationMail $mail) use ($event, $sender, $token) {
