@@ -5,7 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
 
-class InviteToken
+class Invite
 {
     private const JWT_LIFESPAN = 7;
     private const JWT_ALGORITHM = 'HS256';

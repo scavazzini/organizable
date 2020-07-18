@@ -15,7 +15,7 @@ You may create an account if you do not already have one.
 Join now
 @endcomponent
 
-*This invite is valid until {{ $token->getExpiration()->format('j F, Y H:i') }}.*
+*This invite is valid until {{ $invite->getExpiration()->format('j F, Y H:i') }}.*
 
 Thanks,<br>
 {{ config('app.name') }}

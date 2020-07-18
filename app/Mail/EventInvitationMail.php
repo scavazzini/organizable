@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\InviteToken;
+use App\Invite;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -13,17 +13,17 @@ class EventInvitationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $token;
+    public $invite;
     public $event;
     public $sender;
     public $joinUrl;
 
-    public function __construct(InviteToken $token)
+    public function __construct(Invite $invite)
     {
-        $this->token = $token;
-        $this->event = $token->getEvent();
-        $this->sender = $token->getSender();
-        $this->joinUrl = URL::to("/events/{$this->event->id}?invite={$token}");
+        $this->invite = $invite;
+        $this->event = $invite->getEvent();
+        $this->sender = $invite->getSender();
+        $this->joinUrl = URL::to("/events/{$this->event->id}?invite={$invite}");
     }
 
     public function build()

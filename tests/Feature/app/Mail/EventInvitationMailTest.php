@@ -3,7 +3,7 @@
 namespace Tests\Feature\app\Mail;
 
 use App\Event;
-use App\InviteToken;
+use App\Invite;
 use App\Mail\EventInvitationMail;
 use App\Repositories\EventRepositoryInterface;
 use App\User;
@@ -31,17 +31,17 @@ class EventInvitationMailTest extends TestCase
         $this->eventRepository->create($event, $sender);
         $recipient = factory(User::class)->create();
 
-        $token = new InviteToken($sender, $event, $recipient);
+        $invite = new Invite($sender, $event, $recipient);
 
         // Perform invite with mocked Mail facade
         Mail::fake();
-        Mail::to($recipient)->queue(new EventInvitationMail($token));
+        Mail::to($recipient)->queue(new EventInvitationMail($invite));
 
         // Assert mailable was queued
-        Mail::assertQueued(function (EventInvitationMail $mail) use ($event, $sender, $token) {
+        Mail::assertQueued(function (EventInvitationMail $mail) use ($event, $sender, $invite) {
             return $mail->event->id === $event->id &&
                 $mail->sender === $sender &&
-                $mail->token === $token;
+                $mail->invite === $invite;
         });
 
         // Assert a message was queued to the recipient
