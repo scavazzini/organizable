@@ -57,4 +57,9 @@ class EloquentUserRepository implements UserRepositoryInterface
             'password' => bcrypt($newPassword),
         ]);
     }
+
+    public function getByUuid(string $uuid): ?User
+    {
+        return User::find($uuid);
+    }
 }
