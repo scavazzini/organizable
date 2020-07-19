@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Repositories\EventRepositoryInterface;
+use App\Repositories\UserRepositoryInterface;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
 
@@ -29,9 +31,13 @@ class Invite
     {
         $payload = JWT::decode($jwtToken, env('APP_KEY'), array(self::JWT_ALGORITHM));
 
-        $sender = User::findOrFail($payload->sid);
-        $recipient = User::findOrFail($payload->rid);
-        $event = Event::findOrFail($payload->event);
+        $userRepository = app()->make(UserRepositoryInterface::class);
+        $eventRepository = app()->make(EventRepositoryInterface::class);
+
+        $sender = $userRepository->getByUuid($payload->sid);
+        $recipient = $userRepository->getByUuid($payload->rid);
+        $event = $eventRepository->getByUuid($payload->event);
+
         $issuedAt = Carbon::createFromTimestamp($payload->iat);
         $expiration = Carbon::createFromTimestamp($payload->exp);
 
