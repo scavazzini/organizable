@@ -62,4 +62,9 @@ class EloquentUserRepository implements UserRepositoryInterface
     {
         return User::find($uuid);
     }
+
+    public function getAll(): array
+    {
+        return User::all()->all();
+    }
 }

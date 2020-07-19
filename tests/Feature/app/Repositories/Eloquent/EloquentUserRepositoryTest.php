@@ -79,6 +79,16 @@ class EloquentUserRepositoryTest extends TestCase
         $this->userRepository->updateUser($newUser, $newData);
     }
 
+    public function testShouldGetAllUsers()
+    {
+        $quantity = 5;
+        factory(User::class, $quantity)->create();
+
+        $usersFound = $this->userRepository->getAll();
+
+        $this->assertCount($quantity, $usersFound);
+    }
+
     public function testShouldGetUserByUuid()
     {
         $user = factory(User::class)->create();
