@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Event;
 use App\Observers\EventObserver;
+use App\Observers\UserObserver;
+use App\User;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Event::observe(EventObserver::class);
+        User::observe(UserObserver::class);
     }
 }
