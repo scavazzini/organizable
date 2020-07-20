@@ -8,6 +8,6 @@ class EventObserver
 {
     public function deleting(Event $event)
     {
-        $event->participants()->detach();
+        $event->guests()->detach();
     }
 }

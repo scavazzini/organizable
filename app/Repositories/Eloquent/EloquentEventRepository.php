@@ -47,7 +47,7 @@ class EloquentEventRepository implements EventRepositoryInterface
     public function getInRange(\DateTime $from, \DateTime $to, User $user): array
     {
         return Event::query()
-            ->whereHas('participants', function(Builder $query) use ($user) {
+            ->whereHas('guests', function(Builder $query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->where('start_at', '<=', $to)
@@ -60,7 +60,7 @@ class EloquentEventRepository implements EventRepositoryInterface
     public function getAll(User $user): array
     {
         return Event::query()
-            ->whereHas('participants', function(Builder $query) use ($user) {
+            ->whereHas('guests', function(Builder $query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->orderBy('start_at')
@@ -104,6 +104,6 @@ class EloquentEventRepository implements EventRepositoryInterface
 
     public function unlinkUser(Event $event, User $user): void
     {
-        $event->participants()->detach($user);
+        $event->guests()->detach($user);
     }
 }

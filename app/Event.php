@@ -15,15 +15,15 @@ class Event extends Model
 
     public function isOwnedBy(User $user): bool
     {
-        $participant = $this->participants()->find($user->id);
+        $guest = $this->guests()->find($user->id);
 
-        if (!is_a($participant, User::class)) {
+        if (!is_a($guest, User::class)) {
             return false;
         }
-        return $participant->pivot->owner;
+        return $guest->pivot->owner;
     }
 
-    public function participants()
+    public function guests()
     {
         return $this->belongsToMany(User::class)
             ->withPivot('owner')
