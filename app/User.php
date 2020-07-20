@@ -44,4 +44,10 @@ class User extends Authenticatable
             ->withPivot('owner')
             ->withTimestamps();
     }
+
+    public function notification_types()
+    {
+        return $this->belongsToMany(NotificationType::class)
+            ->withTimestamps();
+    }
 }
