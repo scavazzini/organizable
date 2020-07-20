@@ -10,20 +10,26 @@ use Illuminate\Support\Facades\Validator;
 
 class EloquentUserRepository implements UserRepositoryInterface
 {
-    public function getUsersWithUpcomingEvents(int $days): array
+    public function getUsersWithUpcomingEvents(int $days, bool $onlyNotifiableUsers = true): array
     {
         $from = Carbon::today()->startOfDay();
         $to = $from->copy()->addDays($days)->endOfDay();
 
-        return User::query()
+        $queryBuilder = User::query()
             ->whereHas('events', function($query) use ($from, $to) {
                 $query->whereBetween('start_at', [$from, $to]);
             })
             ->with(['events' => function($query) use ($to, $from) {
                 $query->whereBetween('start_at', [$from, $to]);
-            }])
-            ->get()
-            ->all();
+            }]);
+
+        if ($onlyNotifiableUsers) {
+            $queryBuilder->whereHas('notification_types', function($query) {
+                $query->where('notification_types.id', '=', 'upcoming-events');
+            });
+        }
+
+        return $queryBuilder->get()->all();
     }
 
     public function updateUser(User $user, array $data): void
