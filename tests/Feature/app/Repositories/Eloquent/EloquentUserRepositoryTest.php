@@ -22,7 +22,7 @@ class EloquentUserRepositoryTest extends TestCase
         $this->userRepository = new EloquentUserRepository();
     }
 
-    public function testShouldGetUsersWithUpcomingEvents()
+    public function testShouldGetNotifiableUsersWithUpcomingEvents()
     {
         $userWithUpcomingEvent = factory(User::class)->create()
             ->each(function ($user) {
@@ -43,6 +43,27 @@ class EloquentUserRepositoryTest extends TestCase
         $users = $this->userRepository->getUsersWithUpcomingEvents(5);
 
         $this->assertCount(1, $users);
+    }
+
+    public function testShouldGetEvenNonNotifiableUsersWithUpcomingEvents()
+    {
+        $notifiableUser = factory(User::class)->create();
+        $notifiableUser->events()->save(factory(Event::class)->make([
+            'start_at' => Carbon::now(),
+            'end_at' => Carbon::now()->addWeek(),
+        ]));
+
+        $nonNotifiableUser = factory(User::class)->create();
+        $nonNotifiableUser->events()->save(factory(Event::class)->make([
+            'start_at' => Carbon::now(),
+            'end_at' => Carbon::now()->addWeek(),
+        ]));
+        $nonNotifiableUser->notification_types()->detach();
+
+        // Get all users with upcoming events, event non-notifiable ones
+        $users = $this->userRepository->getUsersWithUpcomingEvents(5, false);
+
+        $this->assertCount(2, $users);
     }
 
     public function testShouldUpdateUser()
