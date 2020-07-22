@@ -3,6 +3,7 @@
 namespace Tests\Feature\app\Repositories\Eloquent;
 
 use App\Event;
+use App\NotificationType;
 use App\Repositories\Eloquent\EloquentUserRepository;
 use App\User;
 use Carbon\Carbon;
@@ -136,5 +137,70 @@ class EloquentUserRepositoryTest extends TestCase
         $newPassword = '1234';
 
         $this->userRepository->updatePassword($user, $newPassword);
+    }
+
+    public function testShouldCheckUserIsNotifiableByNotification()
+    {
+        $user = factory(User::class)->create();
+        $notificationType = factory(NotificationType::class)->create();
+
+        $this->userRepository->addNotification($user, $notificationType->id);
+
+        $isNotifiable = $this->userRepository->isNotifiableBy($user, $notificationType->id);
+
+        $this->assertTrue($isNotifiable);
+    }
+
+    public function testShouldCheckUserIsNotNotifiableByNotification()
+    {
+        $user = factory(User::class)->create();
+        $notificationType1 = factory(NotificationType::class)->create();
+        $notificationType2 = factory(NotificationType::class)->create();
+
+        $this->userRepository->addNotification($user, $notificationType1->id);
+
+        $isNotifiable = $this->userRepository->isNotifiableBy($user, $notificationType2->id);
+
+        $this->assertFalse($isNotifiable);
+    }
+
+    public function testShouldAddNotificationToUser()
+    {
+        $user = factory(User::class)->create();
+        $notificationType = factory(NotificationType::class)->create();
+
+        $this->userRepository->addNotification($user, $notificationType->id);
+
+        $this->assertTrue($this->userRepository->isNotifiableBy($user, $notificationType->id));
+    }
+
+    public function testShouldRemoveANotificationOfUser()
+    {
+        $user = factory(User::class)->create();
+        $notificationType = factory(NotificationType::class)->create();
+
+        $this->userRepository->addNotification($user, $notificationType->id);
+
+        $this->assertTrue($this->userRepository->isNotifiableBy($user, $notificationType->id));
+
+        $this->userRepository->removeNotification($user, $notificationType->id);
+
+        $this->assertFalse($this->userRepository->isNotifiableBy($user, $notificationType->id));
+    }
+
+    public function testShouldRemoveAllNotificationsOfUser()
+    {
+        $user = factory(User::class)->create();
+        $notifications = factory(NotificationType::class, 5)->create();
+
+        foreach ($notifications as $notification) {
+            $this->userRepository->addNotification($user, $notification->id);
+        }
+
+        $this->userRepository->clearNotifications($user);
+
+        foreach ($notifications as $notification) {
+            $this->assertFalse($this->userRepository->isNotifiableBy($user, $notification->id));
+        }
     }
 }
