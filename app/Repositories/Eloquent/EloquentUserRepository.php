@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\NotificationType;
 use App\Repositories\UserRepositoryInterface;
 use App\User;
 use Carbon\Carbon;
@@ -72,5 +73,28 @@ class EloquentUserRepository implements UserRepositoryInterface
     public function getAll(): array
     {
         return User::all()->all();
+    }
+
+    public function isNotifiableBy(User $user, string $notificationId): bool
+    {
+        $notificationExists = $user->notification_types()->find($notificationId);
+        return is_a($notificationExists, NotificationType::class);
+    }
+
+    public function addNotification(User $user, string $notificationId): void
+    {
+        $notificationType = NotificationType::findOrFail($notificationId);
+        $user->notification_types()->syncWithoutDetaching($notificationType);
+    }
+
+    public function removeNotification(User $user, string $notificationId): void
+    {
+        $notificationType = NotificationType::findOrFail($notificationId);
+        $user->notification_types()->detach($notificationType);
+    }
+
+    public function clearNotifications(User $user): void
+    {
+        $user->notification_types()->detach();
     }
 }

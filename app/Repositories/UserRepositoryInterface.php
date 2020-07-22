@@ -11,4 +11,8 @@ interface UserRepositoryInterface
     public function getByUuid(string $uuid): ?User;
     public function updateUser(User $user, array $data): void;
     public function updatePassword(User $user, string $newPassword): void;
+    public function isNotifiableBy(User $user, string $notificationId): bool;
+    public function addNotification(User $user, string $notificationId): void;
+    public function removeNotification(User $user, string $notificationId): void;
+    public function clearNotifications(User $user): void;
 }
