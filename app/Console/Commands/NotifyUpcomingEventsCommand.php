@@ -31,21 +31,31 @@ class NotifyUpcomingEventsCommand extends Command
             return 0;
         }
 
-        $bar = $this->output->createProgressBar();
+        $bar = null;
 
-        $notifyJob->setOnStart(function($users) use ($bar) {
+        $notifyJob->setOnStart(function($users) use (&$bar) {
+            if ($users === 0) {
+                $this->comment(' No users to notify.' . PHP_EOL);
+                return;
+            }
+
             $this->line(" Queuing emails...");
+            $bar = $this->output->createProgressBar();
             $bar->setMaxSteps($users);
             $bar->start();
         });
 
-        $notifyJob->setOnUpdate(function () use ($bar) {
-            $bar->advance();
+        $notifyJob->setOnUpdate(function () use (&$bar) {
+            if (!is_null($bar)) {
+                $bar->advance();
+            }
         });
 
-        $notifyJob->setOnFinish(function () use ($bar) {
-            $bar->finish();
-            $this->line(' Done.' . PHP_EOL);
+        $notifyJob->setOnFinish(function () use (&$bar) {
+            if (!is_null($bar)) {
+                $bar->finish();
+                $this->line(' Done.' . PHP_EOL);
+            }
         });
 
         dispatch_now($notifyJob);
