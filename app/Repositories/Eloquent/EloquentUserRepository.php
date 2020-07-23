@@ -26,7 +26,7 @@ class EloquentUserRepository implements UserRepositoryInterface
 
         if ($onlyNotifiableUsers) {
             $queryBuilder->whereHas('notification_types', function($query) {
-                $query->where('notification_types.id', '=', 'upcoming-events');
+                $query->where('notification_types.id', '=', NotificationType::UPCOMING_EVENTS);
             });
         }
 

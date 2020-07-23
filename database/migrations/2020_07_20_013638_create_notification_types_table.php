@@ -1,5 +1,6 @@
 <?php
 
+use App\NotificationType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -17,12 +18,12 @@ class CreateNotificationTypesTable extends Migration
 
         DB::table('notification_types')->insert([
             [
-                'id' => 'upcoming-events',
+                'id' => NotificationType::UPCOMING_EVENTS,
                 'name' => 'Upcoming Events',
                 'description' => 'Receive email reminders of your upcoming events.'
             ],
             [
-                'id' => 'guest-joined',
+                'id' => NotificationType::GUEST_JOINED,
                 'name' => 'Guest joined your event',
                 'description' => 'Receive email notification when an invited guest join your event.'
             ],

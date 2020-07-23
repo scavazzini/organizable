@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\NotificationType;
 use App\User;
 
 class UserObserver
@@ -9,8 +10,8 @@ class UserObserver
     public function created(User $user)
     {
         $user->notification_types()->attach([
-            'upcoming-events',
-            'guest-joined',
+            NotificationType::UPCOMING_EVENTS,
+            NotificationType::GUEST_JOINED,
         ]);
     }
 }
