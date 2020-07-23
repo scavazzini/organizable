@@ -28,6 +28,6 @@ class JoinEventService
 
         $this->eventRepository->linkUser($event, $user);
 
-        event(new GuestJoined($user, $event));
+        event(new GuestJoined($invite->getSender(), $user, $event));
     }
 }

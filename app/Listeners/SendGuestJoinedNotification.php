@@ -3,29 +3,21 @@
 namespace App\Listeners;
 
 use App\Events\GuestJoined;
+use App\Mail\GuestJoinedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
 class SendGuestJoinedNotification implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
     public function __construct()
     {
         //
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  GuestJoined  $event
-     * @return void
-     */
-    public function handle(GuestJoined $event)
+   public function handle(GuestJoined $guestJoined)
     {
-        // TODO: Send notification to event owner.
+        $mail = new GuestJoinedMail($guestJoined->guest, $guestJoined->event);
+        Mail::to($guestJoined->owner->email)->queue($mail);
     }
 }

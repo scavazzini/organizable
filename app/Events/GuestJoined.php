@@ -16,14 +16,20 @@ class GuestJoined
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $owner;
+    public $guest;
+    public $event;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $guest, Event $event)
+    public function __construct(User $owner, User $guest, Event $event)
     {
-        //
+        $this->owner = $owner;
+        $this->guest = $guest;
+        $this->event = $event;
     }
 
     /**
