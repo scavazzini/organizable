@@ -21,6 +21,11 @@ class CreateNotificationTypesTable extends Migration
                 'name' => 'Upcoming Events',
                 'description' => 'Receive email reminders of your upcoming events.'
             ],
+            [
+                'id' => 'guest-joined',
+                'name' => 'Guest joined your event',
+                'description' => 'Receive email notification when an invited guest join your event.'
+            ],
         ]);
     }
 

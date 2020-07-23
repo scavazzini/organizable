@@ -8,6 +8,9 @@ class UserObserver
 {
     public function created(User $user)
     {
-        $user->notification_types()->attach('upcoming-events');
+        $user->notification_types()->attach([
+            'upcoming-events',
+            'guest-joined',
+        ]);
     }
 }
