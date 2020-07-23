@@ -14,4 +14,5 @@ interface EventRepositoryInterface
     public function update(Event $event, array $data): void;
     public function delete(Event $event): void;
     public function unlinkUser(Event $event, User $user): void;
+    public function linkUser(Event $event, User $user): void;
 }

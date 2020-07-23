@@ -106,4 +106,9 @@ class EloquentEventRepository implements EventRepositoryInterface
     {
         $event->guests()->detach($user);
     }
+
+    public function linkUser(Event $event, User $user): void
+    {
+        $event->guests()->syncWithoutDetaching($user);
+    }
 }

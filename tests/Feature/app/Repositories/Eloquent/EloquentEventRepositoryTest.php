@@ -137,4 +137,19 @@ class EloquentEventRepositoryTest extends TestCase
             'event_id' => $event->id,
         ]);
     }
+
+    public function testShouldLinkUserAndEvent()
+    {
+        $user = factory(User::class)->create();
+        $event = factory(Event::class)->create();
+
+        $this->eventRepository->linkUser($event, $user);
+
+        $this->assertDatabaseHas('events', ['id' => $event->id]);
+        $this->assertDatabaseHas('users', ['id' => $user->id]);
+        $this->assertDatabaseHas('event_user', [
+            'user_id' => $user->id,
+            'event_id' => $event->id,
+        ]);
+    }
 }
