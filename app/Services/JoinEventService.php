@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Event;
 use App\Events\GuestJoined;
 use App\Invite;
 use App\Repositories\EventRepositoryInterface;
@@ -20,6 +21,11 @@ class JoinEventService
     public function join(User $user, Invite $invite)
     {
         $event = $invite->getEvent();
+
+        if ($event->isAGuest($user)) {
+            return;
+        }
+
         $this->eventRepository->linkUser($event, $user);
 
         event(new GuestJoined($user, $event));

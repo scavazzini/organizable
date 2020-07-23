@@ -23,6 +23,12 @@ class Event extends Model
         return $guest->pivot->owner;
     }
 
+    public function isAGuest(User $user): bool
+    {
+        $guest = $this->guests()->find($user->id);
+        return is_a($guest, User::class);
+    }
+
     public function guests()
     {
         return $this->belongsToMany(User::class)
